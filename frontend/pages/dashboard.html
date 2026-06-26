@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header>
+    <h1>Dashboard</h1>
+</header>
+
+<div class="dashboard">
+
+    <div class="card">
+        <h2>Total Incidents</h2>
+        <p id="totalIncidents">0</p>
+    </div>
+
+    <div class="card">
+        <h2>Emergency Alerts</h2>
+        <p id="totalAlerts">0</p>
+    </div>
+
+    <div class="card">
+        <h2>Unsafe Areas</h2>
+        <p id="unsafeAreas">0</p>
+    </div>
+
+</div>
+
+<script>
+let incidents =
+JSON.parse(localStorage.getItem("incidents")) || [];
+
+document.getElementById("totalIncidents").innerText =
+incidents.length;
+
+document.getElementById("totalAlerts").innerText =
+incidents.length;
+
+document.getElementById("unsafeAreas").innerText =
+Math.floor(incidents.length/2);
+</script>
+
+</body>
+</html>

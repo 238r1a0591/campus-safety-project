@@ -1,4 +1,4 @@
- const mongoose = require("mongoose");
+const mongoose = require("mongoose");
 
 const incidentSchema = new mongoose.Schema(
 {
@@ -15,6 +15,16 @@ const incidentSchema = new mongoose.Schema(
     description: {
         type: String,
         required: true
+    },
+
+    flagged: {
+        type: Boolean,
+        default: false
+    },
+
+    status: {
+        type: String,
+        default: "Pending"
     }
 },
 {

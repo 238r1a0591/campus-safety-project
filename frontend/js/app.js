@@ -1,359 +1,171 @@
-window.onload = function () {
+// Backend API URL
+const API_URL = "http://localhost:5000/api";
 
-    loadIncidents();
-
-    const user =
-        JSON.parse(localStorage.getItem("loggedInUser"));
-
-    if (user) {
-
-        document.getElementById("userStatus").innerHTML =
-            "Logged in as: " + user.name;
-
-    }
-};
-// ===============================
-// Load Incidents on Page Load
-// ===============================
-
+// When the page loads, get all incidents
 window.onload = function () {
     loadIncidents();
 };
 
-// ===============================
-// Report Incident
-// ===============================
-
+// =======================
+// REPORT INCIDENT
+// =======================
 async function sendAlert() {
 
     const location = document.getElementById("location").value;
     const threatType = document.getElementById("threatType").value;
     const description = document.getElementById("description").value;
 
-    if (!location || !description) {
-        alert("Please fill all fields!");
+    if (location === "" || description === "") {
+        alert("Please fill all fields.");
         return;
     }
 
-    try {
+    const response = await fetch(API_URL + "/incidents", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            location,
+            threatType,
+            description
+        })
+    });
 
-        const response = await fetch(
-            "http://localhost:5000/api/incidents",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    location,
-                    threatType,
-                    description
-                })
-            }
-        );
+    const data = await response.json();
 
-        if (response.ok) {
+    if (data.success) {
+        alert("Incident Reported Successfully");
 
-            alert("Incident Reported Successfully!");
+        document.getElementById("location").value = "";
+        document.getElementById("description").value = "";
 
-            document.getElementById("location").value = "";
-            document.getElementById("description").value = "";
-
-            loadIncidents();
-
-        } else {
-
-            alert("Failed to report incident");
-
-        }
-
-    } catch (error) {
-
-        console.error(error);
-        alert("Server Error");
-
+        loadIncidents();
     }
 }
 
-// ===============================
-// Load Incidents
-// ===============================
-
+// =======================
+// LOAD INCIDENTS
+// =======================
 async function loadIncidents() {
 
-    try {
+    const response = await fetch(API_URL + "/incidents");
 
-        const response = await fetch(
-            "http://localhost:5000/api/incidents"
-        );
+    const incidents = await response.json();
 
-        const incidents = await response.json();
+    let html = "";
 
-        const incidentList =
-            document.getElementById("incidentList");
+    incidents.forEach((incident) => {
 
-        if (!incidentList) return;
+        html += `
+        <div class="incident-card">
+            <h3>${incident.threatType}</h3>
+            <p><b>Location:</b> ${incident.location}</p>
+            <p>${incident.description}</p>
+            <p><b>Status:</b> ${incident.status}</p>
+            <hr>
+        </div>
+        `;
 
-        incidentList.innerHTML = "";
+    });
 
-        if (incidents.length === 0) {
-
-            incidentList.innerHTML =
-                "<p>No incidents reported yet.</p>";
-
-            return;
-        }
-
-        incidents.forEach((incident) => {
-
-            incidentList.innerHTML += `
-                <div class="incident-card">
-                    <h3>${incident.threatType}</h3>
-
-                    <p>
-                        <strong>Location:</strong>
-                        ${incident.location}
-                    </p>
-
-                    <p>
-                        <strong>Description:</strong>
-                        ${incident.description}
-                    </p>
-
-                    <p>
-                        <strong>Date:</strong>
-                        ${new Date(
-                            incident.createdAt
-                        ).toLocaleString()}
-                    </p>
-                </div>
-            `;
-        });
-
-    } catch (error) {
-
-        console.error(error);
-
-    }
+    document.getElementById("incidentList").innerHTML = html;
 }
 
- 
-// Register User (Professional)
-// ===============================
-
+// =======================
+// REGISTER USER
+// =======================
 async function registerUser() {
 
-    const name =
-        document.getElementById("name").value.trim();
+    const name = document.getElementById("name").value;
+    const email = document.getElementById("email").value;
+    const phone = document.getElementById("phone").value;
+    const password = document.getElementById("registerPassword").value;
 
-    const email =
-        document.getElementById("email").value.trim();
+    const response = await fetch("http://localhost:5000/api/users/register", {
 
-    const phone =
-        document.getElementById("phone").value.trim();
+        method: "POST",
 
-    const password =
-        document.getElementById("password").value;
+        headers: {
+            "Content-Type": "application/json"
+        },
 
-    // Validation
-    if (!name || !email || !phone || !password) {
+        body: JSON.stringify({
+            name,
+            email,
+            phone,
+            password
+        })
 
-        alert("Please fill all fields!");
-        return;
-    }
+    });
 
-    // Email validation
-    const emailPattern =
-        /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const data = await response.json();
 
-    if (!emailPattern.test(email)) {
+    alert(data.message);
 
-        alert("Please enter a valid email address!");
-        return;
-    }
-
-    // Password validation
-    if (password.length < 6) {
-
-        alert("Password must be at least 6 characters!");
-        return;
-    }
-
-    try {
-
-        const response = await fetch(
-            "http://localhost:5000/api/users/register",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    name,
-                    email,
-                    phone,
-                    password
-                })
-            }
-        );
-
-        const data = await response.json();
-
-        if (response.ok) {
-
-            alert("Registration Successful!");
-
-            document.getElementById("name").value = "";
-            document.getElementById("email").value = "";
-            document.getElementById("phone").value = "";
-            document.getElementById("password").value = "";
-
-        } else {
-
-            alert(data.message);
-        }
-
-    } catch (error) {
-
-        console.error(error);
-        alert("Registration Failed!");
-    }
 }
 
+// =======================
+// LOGIN USER
+// =======================
+function loginUser() {
+    alert("Login API will be connected in the next step.");
+}
 
+// =======================
+// CHECK IN
+// =======================
+function checkIn() {
 
-// ===============================
-// Login User
-// ===============================
+    const id = document.getElementById("studentId").value;
 
-
-async function loginUser() {
-
-    const email =
-        document.getElementById("loginEmail").value;
-
-    const password =
-        document.getElementById("loginPassword").value;
-
-    if (!email || !password) {
-
-        alert("Please enter Email and Password");
+    if (id === "") {
+        alert("Enter Student ID");
         return;
     }
 
-    try {
-
-        const response = await fetch(
-            "http://localhost:5000/api/users/login",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    email,
-                    password
-                })
-            }
-        );
-
-        const data = await response.json();
-
-        if (response.ok) {
-
-            alert("Welcome " + data.user.name);
-
-            document.querySelector("header p").innerHTML =
-            "Logged in as: " + data.user.name;
-
-            localStorage.setItem(
-                "loggedInUser",
-                JSON.stringify(data.user)
-            );
-
-        } else {
-
-            alert(data.message);
-
-        }
-
-    } catch (error) {
-
-        console.error(error);
-
-        alert("Login Failed");
-
-    }
+    alert("Checked In Successfully");
 }
 
-// Check Out
-// ===============================
-
+// =======================
+// CHECK OUT
+// =======================
 function checkOut() {
 
-    const studentId =
-        localStorage.getItem("checkedInUser");
+    const id = document.getElementById("studentId").value;
 
-    if (!studentId) {
-
-        alert("No user checked in");
+    if (id === "") {
+        alert("Enter Student ID");
         return;
     }
 
-    localStorage.removeItem(
-        "checkedInUser"
-    );
-
-    alert("✅ Checked Out Successfully");
+    alert("Checked Out Successfully");
 }
 
-// ===============================
-// Panic Button
-// ===============================
-
+// =======================
+// PANIC BUTTON
+// =======================
 function panicAlert() {
-
-    const confirmAlert = confirm(
-        "Send Emergency Alert?"
-    );
-
-    if (confirmAlert) {
-
-        alert(
-            "🚨 Emergency Alert Sent!"
-        );
-    }
+    alert("Emergency Alert Sent!");
 }
 
-// ===============================
-// Call Security
-// ===============================
-
+// =======================
+// CALL SECURITY
+// =======================
 function callSecurity() {
-
-    alert(
-        "📞 Campus Security\nPhone: +91 9876543210"
-    );
+    alert("Calling Security...");
 }
 
-// ===============================
-// Dark Mode
-// ===============================
-
-function toggleDarkMode() {
-
-    document.body.classList.toggle("dark");
-
-}
+// =======================
+// LOGOUT
+// =======================
 function logoutUser() {
-
-    localStorage.removeItem("loggedInUser");
-
-    document.getElementById("userStatus").innerHTML =
-    "Report incidents, check-in, and view alerts";
-
-    alert("Logged Out Successfully");
-
+    alert("Logged Out");
 }
-const password =
-document.getElementById("password").value;
+
+// =======================
+// DARK MODE
+// =======================
+function toggleDarkMode() {
+    document.body.classList.toggle("dark");
+}

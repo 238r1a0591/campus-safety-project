@@ -1,29 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Safety & Emergency Response</title>
 
-<title>Campus Safety & Emergency Response</title>
+    <link rel="stylesheet" href="css/style.css">
 
-<link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 
 <body>
 
- <header>
+<header>
     <h1>🛡 Campus Safety & Emergency Response</h1>
-    <p id="userStatus">Report incidents, check-in, and view alerts</p>
+    <p id="userStatus">Report incidents, check-in and receive emergency alerts</p>
 </header>
 
 <nav>
     <ul>
-        <li><a href="index.html">Home</a></li>
+        <li><a href="#">Home</a></li>
         <li><a href="#incidentList">Dashboard</a></li>
         <li><a href="#loginSection">Login</a></li>
         <li><a href="#registerSection">Register</a></li>
@@ -34,45 +33,52 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
 
 <div class="grid">
 
-<!-- LEFT SIDE -->
+<!-- LEFT -->
 
 <div>
 
 <div class="card">
-<h2>🚨 Report an Incident</h2>
+
+<h2>🚨 Report Incident</h2>
 
 <label>Location</label>
-<input type="text"
+
+<input
+type="text"
 id="location"
 placeholder="Enter Location">
-<input
-type="password"
-id="password"
-placeholder="Password">
 
 <label>Threat Type</label>
 
 <select id="threatType">
+
 <option>Medical Emergency</option>
+
 <option>Fire</option>
+
 <option>Theft</option>
+
 <option>Suspicious Activity</option>
+
 </select>
 
 <label>Description</label>
 
-<textarea id="description"
+<textarea
+id="description"
 placeholder="Describe the incident"></textarea>
 
 <button onclick="sendAlert()">
+
 Send Alert
+
 </button>
 
 <button onclick="toggleDarkMode()">
-Dark Mode
-</button>
 
-<div id="toast"></div>
+Dark Mode
+
+</button>
 
 </div>
 
@@ -84,7 +90,7 @@ Dark Mode
 
 <div id="incidentList">
 
-<p>No incidents reported yet.</p>
+<p>No incidents available.</p>
 
 </div>
 
@@ -94,7 +100,7 @@ Dark Mode
 
 <div class="card">
 
-<h2>✅ Check-In / Check-Out</h2>
+<h2>✅ Student Check In / Check Out</h2>
 
 <input
 type="text"
@@ -104,18 +110,22 @@ placeholder="Student ID">
 <br><br>
 
 <button onclick="checkIn()">
+
 Check In
+
 </button>
 
 <button onclick="checkOut()">
+
 Check Out
+
 </button>
 
 </div>
 
 </div>
 
-<!-- RIGHT SIDE -->
+<!-- RIGHT -->
 
 <div>
 
@@ -141,17 +151,26 @@ src="https://maps.google.com/maps?q=CMR%20Engineering%20College&t=&z=15&ie=UTF8&
 <h2>⚡ Emergency Actions</h2>
 
 <button onclick="panicAlert()">
+
 🚨 Panic Button
+
 </button>
 
 <br><br>
 
 <button onclick="callSecurity()">
+
 📞 Call Security
+
 </button>
+
+<br><br>
+
 <button onclick="logoutUser()">
-    Logout
-</button>"
+
+Logout
+
+</button>
 
 </div>
 
@@ -172,7 +191,9 @@ id="loginPassword"
 placeholder="Password">
 
 <button onclick="loginUser()">
+
 Login
+
 </button>
 
 </div>
@@ -197,13 +218,16 @@ placeholder="Email">
 type="text"
 id="phone"
 placeholder="Phone Number">
+
 <input
 type="password"
-id="password"
+id="registerPassword"
 placeholder="Password">
 
 <button onclick="registerUser()">
+
 Register
+
 </button>
 
 </div>
@@ -215,11 +239,17 @@ Register
 <h2>🛡 Safety Tips</h2>
 
 <ul>
-<li>Report suspicious activities immediately.</li>
-<li>Keep your phone charged.</li>
+
+<li>Report suspicious activity immediately.</li>
+
 <li>Save emergency contact numbers.</li>
-<li>Stay alert in isolated areas.</li>
+
 <li>Travel in groups at night.</li>
+
+<li>Keep your phone charged.</li>
+
+<li>Avoid isolated areas after dark.</li>
+
 </ul>
 
 </div>
@@ -231,7 +261,9 @@ Register
 </div>
 
 <footer>
+
 <p>© 2026 Campus Safety & Emergency Response</p>
+
 </footer>
 
 <script src="js/app.js"></script>

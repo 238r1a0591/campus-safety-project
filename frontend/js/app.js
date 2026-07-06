@@ -1,5 +1,5 @@
 // Backend API URL
-const API_URL = "http://localhost:5000/api";
+const API_URL = "https://campus-safety-backend-xxxx.onrender.com/api";
 
 // When the page loads, get all incidents
 window.onload = function () {

@@ -82,7 +82,7 @@ async function registerUser() {
     const phone = document.getElementById("phone").value;
     const password = document.getElementById("registerPassword").value;
 
-    const response = await fetch("http://localhost:5000/api/users/register", {
+    const response = await fetch(API_URL + "/users/register", {
 
         method: "POST",
 

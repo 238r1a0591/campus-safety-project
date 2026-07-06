@@ -1,272 +1,196 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Campus Safety & Emergency Response</title>
+// Backend API URL
+const API_URL = "https://campus-safety-backend-xxxx.onrender.com/api";
+
+// When the page loads, get all incidents
+window.onload = function () {
+    loadIncidents();
+};
 
-    <link rel="stylesheet" href="css/style.css">
+// =======================
+// REPORT INCIDENT
+// =======================
+async function sendAlert() {
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    const location = document.getElementById("location").value;
+    const threatType = document.getElementById("threatType").value;
+    const description = document.getElementById("description").value;
 
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-</head>
+    if (location === "" || description === "") {
+        alert("Please fill all fields.");
+        return;
+    }
 
-<body>
+    const response = await fetch(API_URL + "/incidents", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            location,
+            threatType,
+            description
+        })
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+        alert("Incident Reported Successfully");
+
+        document.getElementById("location").value = "";
+        document.getElementById("description").value = "";
+
+        loadIncidents();
+    }
+}
+
+// =======================
+// LOAD INCIDENTS
+// =======================
+async function loadIncidents() {
+
+    const response = await fetch(API_URL + "/incidents");
 
-<header>
-    <h1>🛡 Campus Safety & Emergency Response</h1>
-    <p id="userStatus">Report incidents, check-in and receive emergency alerts</p>
-</header>
+    const incidents = await response.json();
 
-<nav>
-    <ul>
-        <li><a href="#">Home</a></li>
-        <li><a href="#incidentList">Dashboard</a></li>
-        <li><a href="#loginSection">Login</a></li>
-        <li><a href="#registerSection">Register</a></li>
-    </ul>
-</nav>
+    let html = "";
 
-<div class="container">
+    incidents.forEach((incident) => {
+
+        html += `
+        <div class="incident-card">
+            <h3>${incident.threatType}</h3>
+            <p><b>Location:</b> ${incident.location}</p>
+            <p>${incident.description}</p>
+            <p><b>Status:</b> ${incident.status}</p>
+            <hr>
+        </div>
+        `;
 
-<div class="grid">
+    });
 
-<!-- LEFT -->
-
-<div>
-
-<div class="card">
-
-<h2>🚨 Report Incident</h2>
-
-<label>Location</label>
-
-<input
-type="text"
-id="location"
-placeholder="Enter Location">
-
-<label>Threat Type</label>
-
-<select id="threatType">
-
-<option>Medical Emergency</option>
-
-<option>Fire</option>
-
-<option>Theft</option>
-
-<option>Suspicious Activity</option>
-
-</select>
-
-<label>Description</label>
-
-<textarea
-id="description"
-placeholder="Describe the incident"></textarea>
-
-<button onclick="sendAlert()">
-
-Send Alert
-
-</button>
-
-<button onclick="toggleDarkMode()">
-
-Dark Mode
-
-</button>
-
-</div>
-
-<br>
-
-<div class="card">
-
-<h2>📋 Live Incident Feed</h2>
-
-<div id="incidentList">
-
-<p>No incidents available.</p>
-
-</div>
-
-</div>
-
-<br>
-
-<div class="card">
-
-<h2>✅ Student Check In / Check Out</h2>
-
-<input
-type="text"
-id="studentId"
-placeholder="Student ID">
-
-<br><br>
-
-<button onclick="checkIn()">
-
-Check In
-
-</button>
-
-<button onclick="checkOut()">
-
-Check Out
-
-</button>
-
-</div>
-
-</div>
-
-<!-- RIGHT -->
-
-<div>
-
-<div class="card">
-
-<h2>🗺 Campus Map</h2>
-
-<iframe
-width="100%"
-height="300"
-style="border:0;border-radius:10px;"
-loading="lazy"
-allowfullscreen
-src="https://maps.google.com/maps?q=CMR%20Engineering%20College&t=&z=15&ie=UTF8&iwloc=&output=embed">
-</iframe>
-
-</div>
-
-<br>
-
-<div class="card">
-
-<h2>⚡ Emergency Actions</h2>
-
-<button onclick="panicAlert()">
-
-🚨 Panic Button
-
-</button>
-
-<br><br>
-
-<button onclick="callSecurity()">
-
-📞 Call Security
-
-</button>
-
-<br><br>
-
-<button onclick="logoutUser()">
-
-Logout
-
-</button>
-
-</div>
-
-<br>
-
-<div class="card" id="loginSection">
-
-<h2>🔐 Login</h2>
-
-<input
-type="email"
-id="loginEmail"
-placeholder="Email">
-
-<input
-type="password"
-id="loginPassword"
-placeholder="Password">
-
-<button onclick="loginUser()">
-
-Login
-
-</button>
-
-</div>
-
-<br>
-
-<div class="card" id="registerSection">
-
-<h2>👤 Register</h2>
-
-<input
-type="text"
-id="name"
-placeholder="Full Name">
-
-<input
-type="email"
-id="email"
-placeholder="Email">
-
-<input
-type="text"
-id="phone"
-placeholder="Phone Number">
-
-<input
-type="password"
-id="registerPassword"
-placeholder="Password">
-
-<button onclick="registerUser()">
-
-Register
-
-</button>
-
-</div>
-
-<br>
-
-<div class="card">
-
-<h2>🛡 Safety Tips</h2>
-
-<ul>
-
-<li>Report suspicious activity immediately.</li>
-
-<li>Save emergency contact numbers.</li>
-
-<li>Travel in groups at night.</li>
-
-<li>Keep your phone charged.</li>
-
-<li>Avoid isolated areas after dark.</li>
-
-</ul>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<footer>
-
-<p>© 2026 Campus Safety & Emergency Response</p>
-
-</footer>
-
-<script src="js/app.js"></script>
-
-</body>
-</html>
+    document.getElementById("incidentList").innerHTML = html;
+}
+
+// =======================
+// REGISTER USER
+// =======================
+async function registerUser() {
+
+    const name = document.getElementById("name").value;
+    const email = document.getElementById("email").value;
+    const phone = document.getElementById("phone").value;
+    const password = document.getElementById("registerPassword").value;
+
+    const response = await fetch(API_URL + "/users/register", {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+            name,
+            email,
+            phone,
+            password
+        })
+
+    });
+
+    const data = await response.json();
+
+    alert(data.message);
+
+}
+
+// =======================
+// LOGIN USER
+// =======================
+async function loginUser() {
+
+    const email = document.getElementById("loginEmail").value;
+    const password = document.getElementById("loginPassword").value;
+
+    if (email === "" || password === "") {
+        alert("Please fill all fields.");
+        return;
+    }
+
+    const response = await fetch(API_URL + "/users/login", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ email, password })
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+        alert("Login successful. Welcome " + data.user.name);
+        document.getElementById("userStatus").innerText = "Logged in as " + data.user.name;
+    } else {
+        alert(data.message);
+    }
+
+}
+
+// =======================
+// CHECK IN
+// =======================
+function checkIn() {
+
+    const id = document.getElementById("studentId").value;
+
+    if (id === "") {
+        alert("Enter Student ID");
+        return;
+    }
+
+    alert("Checked In Successfully");
+}
+
+// =======================
+// CHECK OUT
+// =======================
+function checkOut() {
+
+    const id = document.getElementById("studentId").value;
+
+    if (id === "") {
+        alert("Enter Student ID");
+        return;
+    }
+
+    alert("Checked Out Successfully");
+}
+
+// =======================
+// PANIC BUTTON
+// =======================
+function panicAlert() {
+    alert("Emergency Alert Sent!");
+}
+
+// =======================
+// CALL SECURITY
+// =======================
+function callSecurity() {
+    alert("Calling Security...");
+}
+
+// =======================
+// LOGOUT
+// =======================
+function logoutUser() {
+    alert("Logged Out");
+}
+
+// =======================
+// DARK MODE
+// =======================
+function toggleDarkMode() {
+    document.body.classList.toggle("dark");
+}

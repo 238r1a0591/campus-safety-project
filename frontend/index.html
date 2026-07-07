@@ -1,196 +1,239 @@
-// Backend API URL
-const API_URL = "https://campus-safety-backend-xxxx.onrender.com/api";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Safety & Emergency Response</title>
 
-// When the page loads, get all incidents
-window.onload = function () {
-    loadIncidents();
-};
+    <link rel="stylesheet" href="css/style.css">
 
-// =======================
-// REPORT INCIDENT
-// =======================
-async function sendAlert() {
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    const location = document.getElementById("location").value;
-    const threatType = document.getElementById("threatType").value;
-    const description = document.getElementById("description").value;
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
 
-    if (location === "" || description === "") {
-        alert("Please fill all fields.");
-        return;
-    }
+<body>
 
-    const response = await fetch(API_URL + "/incidents", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            location,
-            threatType,
-            description
-        })
-    });
+<header>
+    <h1>🛡 Campus Safety & Emergency Response</h1>
+    <p id="userStatus">Stay Safe • Report Incidents • Emergency Alerts</p>
+</header>
 
-    const data = await response.json();
+<nav>
+    <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#incidentList">Incidents</a></li>
+        <li><a href="#loginSection">Login</a></li>
+        <li><a href="#registerSection">Register</a></li>
+    </ul>
+</nav>
 
-    if (data.success) {
-        alert("Incident Reported Successfully");
+<div class="container">
 
-        document.getElementById("location").value = "";
-        document.getElementById("description").value = "";
+<div class="grid">
 
-        loadIncidents();
-    }
-}
+<!-- LEFT SIDE -->
+<div>
 
-// =======================
-// LOAD INCIDENTS
-// =======================
-async function loadIncidents() {
+<div class="card">
 
-    const response = await fetch(API_URL + "/incidents");
+<h2>🚨 Report Incident</h2>
 
-    const incidents = await response.json();
+<label>Location</label>
 
-    let html = "";
+<input
+type="text"
+id="location"
+placeholder="Enter Location">
 
-    incidents.forEach((incident) => {
+<label>Threat Type</label>
 
-        html += `
-        <div class="incident-card">
-            <h3>${incident.threatType}</h3>
-            <p><b>Location:</b> ${incident.location}</p>
-            <p>${incident.description}</p>
-            <p><b>Status:</b> ${incident.status}</p>
-            <hr>
-        </div>
-        `;
+<select id="threatType">
+<option>Medical Emergency</option>
+<option>Fire</option>
+<option>Theft</option>
+<option>Suspicious Activity</option>
+<option>Violence</option>
+</select>
 
-    });
+<label>Description</label>
 
-    document.getElementById("incidentList").innerHTML = html;
-}
+<textarea
+id="description"
+placeholder="Describe the incident"></textarea>
 
-// =======================
-// REGISTER USER
-// =======================
-async function registerUser() {
+<button onclick="sendAlert()">
+Send Alert
+</button>
 
-    const name = document.getElementById("name").value;
-    const email = document.getElementById("email").value;
-    const phone = document.getElementById("phone").value;
-    const password = document.getElementById("registerPassword").value;
+<button onclick="toggleDarkMode()">
+Dark Mode
+</button>
 
-    const response = await fetch(API_URL + "/users/register", {
+</div>
 
-        method: "POST",
+<br>
 
-        headers: {
-            "Content-Type": "application/json"
-        },
+<div class="card">
 
-        body: JSON.stringify({
-            name,
-            email,
-            phone,
-            password
-        })
+<h2>📋 Live Incident Feed</h2>
 
-    });
+<div id="incidentList">
+<p>No incidents reported.</p>
+</div>
 
-    const data = await response.json();
+</div>
 
-    alert(data.message);
+<br>
 
-}
+<div class="card">
 
-// =======================
-// LOGIN USER
-// =======================
-async function loginUser() {
+<h2>✅ Check In / Check Out</h2>
 
-    const email = document.getElementById("loginEmail").value;
-    const password = document.getElementById("loginPassword").value;
+<input
+type="text"
+id="studentId"
+placeholder="Student ID">
 
-    if (email === "" || password === "") {
-        alert("Please fill all fields.");
-        return;
-    }
+<br><br>
 
-    const response = await fetch(API_URL + "/users/login", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ email, password })
-    });
+<button onclick="checkIn()">
+Check In
+</button>
 
-    const data = await response.json();
+<button onclick="checkOut()">
+Check Out
+</button>
 
-    if (data.success) {
-        alert("Login successful. Welcome " + data.user.name);
-        document.getElementById("userStatus").innerText = "Logged in as " + data.user.name;
-    } else {
-        alert(data.message);
-    }
+</div>
 
-}
+</div>
 
-// =======================
-// CHECK IN
-// =======================
-function checkIn() {
+<!-- RIGHT SIDE -->
 
-    const id = document.getElementById("studentId").value;
+<div>
 
-    if (id === "") {
-        alert("Enter Student ID");
-        return;
-    }
+<div class="card">
 
-    alert("Checked In Successfully");
-}
+<h2>🗺 Campus Map</h2>
 
-// =======================
-// CHECK OUT
-// =======================
-function checkOut() {
+<iframe
+width="100%"
+height="300"
+style="border:0;border-radius:10px;"
+loading="lazy"
+allowfullscreen
+src="https://maps.google.com/maps?q=CMR%20Engineering%20College&t=&z=15&ie=UTF8&iwloc=&output=embed">
+</iframe>
 
-    const id = document.getElementById("studentId").value;
+</div>
 
-    if (id === "") {
-        alert("Enter Student ID");
-        return;
-    }
+<br>
 
-    alert("Checked Out Successfully");
-}
+<div class="card">
 
-// =======================
-// PANIC BUTTON
-// =======================
-function panicAlert() {
-    alert("Emergency Alert Sent!");
-}
+<h2>⚡ Emergency</h2>
 
-// =======================
-// CALL SECURITY
-// =======================
-function callSecurity() {
-    alert("Calling Security...");
-}
+<button onclick="panicAlert()">
+🚨 Panic Button
+</button>
 
-// =======================
-// LOGOUT
-// =======================
-function logoutUser() {
-    alert("Logged Out");
-}
+<br><br>
 
-// =======================
-// DARK MODE
-// =======================
-function toggleDarkMode() {
-    document.body.classList.toggle("dark");
-}
+<button onclick="callSecurity()">
+📞 Call Security
+</button>
+
+<br><br>
+
+<button onclick="logoutUser()">
+Logout
+</button>
+
+</div>
+
+<br>
+
+<div class="card" id="loginSection">
+
+<h2>🔐 Login</h2>
+
+<input
+type="email"
+id="loginEmail"
+placeholder="Email">
+
+<input
+type="password"
+id="loginPassword"
+placeholder="Password">
+
+<button onclick="loginUser()">
+Login
+</button>
+
+</div>
+
+<br>
+
+<div class="card" id="registerSection">
+
+<h2>👤 Register</h2>
+
+<input
+type="text"
+id="name"
+placeholder="Full Name">
+
+<input
+type="email"
+id="email"
+placeholder="Email">
+
+<input
+type="text"
+id="phone"
+placeholder="Phone Number">
+
+<input
+type="password"
+id="registerPassword"
+placeholder="Password">
+
+<button onclick="registerUser()">
+Register
+</button>
+
+</div>
+
+<br>
+
+<div class="card">
+
+<h2>🛡 Safety Tips</h2>
+
+<ul>
+<li>Report suspicious activities immediately.</li>
+<li>Keep your mobile charged.</li>
+<li>Save emergency contacts.</li>
+<li>Avoid isolated areas at night.</li>
+<li>Travel in groups whenever possible.</li>
+</ul>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<footer>
+<p>© 2026 Campus Safety & Emergency Response</p>
+</footer>
+
+<script src="js/app.js"></script>
+
+</body>
+</html>

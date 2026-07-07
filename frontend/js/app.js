@@ -1,5 +1,5 @@
 // Backend API URL
-const API_URL = "https://campus-safety-backend-xxxx.onrender.com/api";
+const API_URL = "https://campus-safety-backend-bw9g.onrender.com/api";
 
 // When the page loads, get all incidents
 window.onload = function () {
@@ -20,7 +20,7 @@ async function sendAlert() {
         return;
     }
 
-    const response = await fetch(API_URL + "/incidents", {
+    const response = await fetch(API_URL + "/users/register", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"

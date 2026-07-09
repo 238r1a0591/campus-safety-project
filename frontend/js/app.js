@@ -77,33 +77,55 @@ async function loadIncidents() {
 // =======================
 async function registerUser() {
 
-    const name = document.getElementById("name").value;
-    const email = document.getElementById("email").value;
-    const phone = document.getElementById("phone").value;
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const phone = document.getElementById("phone").value.trim();
     const password = document.getElementById("registerPassword").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
 
-    const response = await fetch(API_URL + "/users/register", {
+    if (!name || !email || !phone || !password || !confirmPassword) {
+        alert("Please fill all fields.");
+        return;
+    }
 
-        method: "POST",
+    if (password !== confirmPassword) {
+        alert("Passwords do not match.");
+        return;
+    }
 
-        headers: {
-            "Content-Type": "application/json"
-        },
+    try {
 
-        body: JSON.stringify({
-            name,
-            email,
-            phone,
-            password
-        })
+        const response = await fetch(API_URL + "/users/register", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                name,
+                email,
+                phone,
+                password
+            })
+        });
 
-    });
+        const data = await response.json();
 
-    const data = await response.json();
+        alert(data.message);
 
-    alert(data.message);
+        if (response.ok) {
+            document.getElementById("name").value = "";
+            document.getElementById("email").value = "";
+            document.getElementById("phone").value = "";
+            document.getElementById("registerPassword").value = "";
+            document.getElementById("confirmPassword").value = "";
+        }
 
+    } catch (err) {
+        alert("Registration failed.");
+        console.error(err);
+    }
 }
+     
 
 // =======================
 // LOGIN USER

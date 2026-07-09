@@ -1,0 +1,235 @@
+/* Reset */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins', sans-serif;
+}
+
+/* Body */
+
+body{
+    background:#f5f5f5;
+    color:#333;
+}
+
+/* Header */
+
+header{
+    background:#c62828;
+    color:white;
+    padding:20px;
+    text-align: center;
+}
+
+header h1{
+    margin:0;
+    font-size:28px;
+}
+
+header p{
+    margin-top:10px;
+    font-size:16px;
+}
+
+/* Navigation */
+
+nav{
+    background:#333;
+}
+
+nav ul{
+    list-style:none;
+    display:flex;
+    justify-content:center;
+}
+
+nav ul li{
+    padding:15px;
+}
+
+nav ul li a{
+    color:white;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+nav ul li a:hover{
+    color:#ffeb3b;
+}
+
+/* Container */
+
+.container{
+    width:90%;
+    margin:20px auto;
+}
+
+/* Grid Layout */
+
+.grid{
+    display:grid;
+    grid-template-columns:2fr 1fr;
+    gap:20px;
+}
+
+/* Cards */
+
+.card{
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.1);
+}
+
+.card h2{
+    margin-bottom:15px;
+    color:#c62828;
+}
+
+/* Inputs */
+
+input,
+select,
+textarea{
+    width:100%;
+    padding:12px;
+    margin-top:8px;
+    margin-bottom:15px;
+    border:1px solid #ccc;
+    border-radius:8px;
+    font-size:14px;
+}
+
+textarea{
+    height:120px;
+    resize:none;
+}
+
+/* Buttons */
+
+button{
+    background:#c62828;
+    color:white;
+    border:none;
+    padding:12px 20px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:15px;
+}
+
+button:hover{
+    background:#a91f1f;
+}
+
+/* Map */
+
+.map-box{
+    height:250px;
+    background:#ececec;
+    border-radius:10px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:#777;
+    font-size:22px;
+}
+
+/* Incident Feed */
+
+#incidentList{
+    margin-top:10px;
+}
+
+.incident-card{
+    border:1px solid #ddd;
+    padding:15px;
+    margin:15px 0;
+    border-radius:10px;
+    background:white;
+}
+
+.incident-card h3{
+    color:#c62828;
+    margin-bottom:8px;
+}
+
+/* Safety Tips */
+
+ul{
+    padding-left:20px;
+}
+
+ul li{
+    margin-bottom:10px;
+}
+
+/* Footer */
+
+footer{
+    background:#333;
+    color:white;
+    text-align:center;
+    padding:15px;
+    margin-top:20px;
+}
+
+/* Dashboard Cards */
+
+.dashboard{
+    display:flex;
+    gap:20px;
+    justify-content:center;
+    margin-top:30px;
+}
+
+.dashboard .card{
+    width:250px;
+    text-align:center;
+}
+
+.dashboard .card p{
+    font-size:35px;
+    font-weight:bold;
+    color:#c62828;
+}
+
+/* Responsive */
+
+@media(max-width:768px){
+
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+    nav ul{
+        flex-direction:column;
+        text-align:center;
+    }
+
+    .dashboard{
+        flex-direction:column;
+        align-items:center;
+    }
+
+}
+.dark{
+    background:#121212;
+    color:white;
+}
+
+.dark .card{
+    background:#1e1e1e;
+    color:white;
+}
+#toast{
+    position:fixed;
+    bottom:20px;
+    right:20px;
+    background:green;
+    color:white;
+    padding:15px;
+    border-radius:8px;
+    display:none;
+}
